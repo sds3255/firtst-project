@@ -31,7 +31,7 @@ public class ApplicationDAO {
 			String sql = "";
 			sql += "INSERT INTO APPLICATION ";
 			sql += "     (APPLICATIONID, MEMBERID, PROGRAMID, CLASS_CHECK) ";
-			sql += "VALUES (application_index.NEXTVAL, ?, ?, ?)";
+			sql += "VALUES (APPLICATION_SEQ.NEXTVAL, ?, ?, ?)";
 
 			pstmt = con.prepareStatement(sql);
 

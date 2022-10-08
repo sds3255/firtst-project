@@ -31,16 +31,18 @@ public class MemberDAO {
 			String sql = "";
 			sql += "INSERT INTO MEMBER ";
 			sql += "     (MEMBERID, PASSWORD, NAME, BIRTH_DATE, PHONE_NUM, EMAIL, ADDRESS ) ";
-			sql += "VALUES (?, ?, ?, ?, ?, ?, ? )";
+			sql += "VALUES (?, ?, ?, ?, ? || '-' || ? || '-' || ?, ?, ? )";
 
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getPw());
 			pstmt.setString(3, vo.getName());
 			pstmt.setString(4, vo.getBirthdate());
-			pstmt.setString(5, vo.getPhoneNum());
-			pstmt.setString(6, vo.getEmail());
-			pstmt.setString(7, vo.getAddress());
+			pstmt.setString(5, vo.getPhoneNum().substring(0, 3));
+			pstmt.setString(6, vo.getPhoneNum().substring(3,7));
+			pstmt.setString(7, vo.getPhoneNum().substring(7));
+			pstmt.setString(8, vo.getEmail());
+			pstmt.setString(9, vo.getAddress());
 
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
