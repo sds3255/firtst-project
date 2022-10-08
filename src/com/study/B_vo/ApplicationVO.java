@@ -14,8 +14,7 @@ public class ApplicationVO {
 	public ApplicationVO(String memberId, int programId,  String classCheck) {
 
 		this.memberId = memberId;
-		this.programId = programId;
-	
+		this.programId = programId;	
 		this.classCheck = classCheck;
 	}
 

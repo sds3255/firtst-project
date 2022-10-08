@@ -101,21 +101,27 @@ public class Application {// 수강신청 항목 "2" 선택시
 	private static void application() throws SQLSyntaxErrorException, NumberFormatException {
 		while (true) {
 			System.out.println("신청을 원하는 종목명을 입력하세요.");
+			List<String> pro = adao.selectProg();
+			for(String li:pro) {
+				System.out.print("\t"+li+"\t||");
+			}
+			System.out.println();
 			System.out.print(">>>");
 			programName = scan.nextLine();
 			System.out.println("\n - 현재 운영중인 " + programName + " 과정 목록 -");
 			if (pdao.selectInfo(programName) == true) {
 				list = pdao.selectAll(programName);
 				for (ProgramListVO vo : list) {
-					System.out.println(vo.getProgramNum() + "\t" + vo.getProgramName() + "\t" + vo.getProgramID() + "\t"
-							+ vo.getClassName() + "\t   " + vo.getTime() + "\t" + vo.getMaximum() + "\t "
-							+ vo.getPrice() + "\t " + vo.getTeacher());
+					System.out.println("[과목번호]"+vo.getProgramNum() + "\t" + "[종목명]"+vo.getProgramName() + "\t" + "[과정번호]"+vo.getProgramID() + "\t"
+							+ "[과정명]"+vo.getClassName() + "\t   " + "[시간]"+vo.getTime() + "\t" + "[최대수강인원]"+vo.getMaximum() + "\t "
+							+ "[가격]"+vo.getPrice() + "\t " + "[강사명]"+vo.getTeacher());
+					System.out.println();
 				}
-				System.out.println("신청을 원하는 과정번호(programID)를 입력하세요. 뒤로가기를 원하면 0을 입력해주세요.");
+				System.out.println("신청을 원하는 과정번호(programID)를 입력하세요. 뒤로가기를 원하면 #을 입력해주세요.");
 				System.out.print(">>>");
 				while (true) {
 					programId = scan.nextLine();
-					if (programId.equals("0")) {
+					if (programId.equals("#")) {
 						break;
 					} else {
 						if (adao.selectInfo(Integer.parseInt(programId)) == true) {

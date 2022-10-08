@@ -24,6 +24,34 @@ public class ApplicationDAO {
 		}
 	}
 
+	//수강신청시 개설한 종목 나열하기 기능
+	public List<String> selectProg() {
+		List<String> list = new ArrayList<String>();
+		boolean num= true;
+		try {
+			con =CommonDriver.getConnection();
+			String sql = "SELECT DISTINCT PROGRAMNAME FROM PROGRAM_LIST";
+
+			pstmt = con.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+			while (num) {
+				if (rs.next()) {
+					String result = rs.getString("PROGRAMNAME");
+					list.add(result);
+				}else {
+				num=false;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			CommonDriver.close(con,pstmt,rs);
+		}
+		return list;
+	}
+
+	
 	// INSERT(수강신청시 정보입력)---->INDEX(+)
 	public void insert(ApplicationVO vo) {
 		try {
