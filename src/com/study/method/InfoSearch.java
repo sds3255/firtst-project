@@ -23,7 +23,9 @@ public class InfoSearch {// 회원정보조회 항목 "3" 선택시
 			choice = scan.nextLine();
 			if (choice.equals("1")) {// 회원정보조회
 				MemberVO info = mdao.select(mvo);
-				System.out.println(info);
+				System.out.println("[ID] " + info.getId() + "\n[성명] " + info.getName() + "\n[생년월일] "
+						+ info.getBirthdate() + "\n[휴대폰번호] " + info.getPhoneNum() + "\n[이메일주소] " + info.getEmail()
+						+ "\n[주소] " + info.getAddress() + "\n[가입날짜] " + info.getDate());
 
 			} else if (choice.equals("2")) {// 회원정보수정
 				System.out.println("변경을 원하는 번호를 선택하세요.\n 1.비밀번호 2.휴대폰번호 3.이메일 4.주소 5.취소");
@@ -62,56 +64,72 @@ public class InfoSearch {// 회원정보조회 항목 "3" 선택시
 	private static void selectNum() {
 		switch (choice) {
 		case "1": // 비밀번호 설정 =>길이는 5-12자리, 미입력시 재입력하도록 기능구현
-			System.out.println("변경할 비밀번호를 입력하세요. (5~12자리)");
+			System.out.println("변경할 비밀번호를 입력하세요.(5~12자리) 작성을 취소하고 메인메뉴로 돌아가길 원하면 #을 입력하세요.");
 			System.out.print(">>>");
-			while (true) {
-				choice = scan.nextLine();
-				if (choice.length() < 13 && choice.length() > 4) {
-					mvo.setPw(choice);
-					mdao.updatePassword(choice, inputId);
-					System.out.println("비밀번호 변경이 완료되었습니다.");
-					break;
-				} else {
-					System.out.println("5~12자리로 다시입력하세요.\n>>>");
+			choice = scan.nextLine();
+			if (!choice.equalsIgnoreCase("#")) {
+				while (true) {
+					choice = scan.nextLine();
+					if (choice.length() < 13 && choice.length() > 4) {
+						mvo.setPw(choice);
+						mdao.updatePassword(choice, inputId);
+						System.out.println("비밀번호 변경이 완료되었습니다.");
+						break;
+					} else {
+						System.out.println("5~12자리로 다시입력하세요.\n>>>");
+						choice = scan.nextLine();
+					}
 				}
 			}
 			break;
-		case "2":// 휴대폰번호작성항목 =>필수항목으로 작성하지 않을시 재입력 문구기능 구현 //구분자구현 못함...
-			System.out.println("변경할 휴대폰번호를 입력하세요.(단,구분문자 포함하여 입력) \\n예시)010-0000-0000로 입력 ");
+		case "2":// 휴대폰번호작성항목 =>필수항목으로 작성하지 않을시 재입력 문구기능 및 구분자구현
+			System.out.println(
+					"변경할 휴대폰번호를 입력하세요.(단,숫자만 입력)//예시)010-0000-0000로 입력 \n작성을 취소하고 메인메뉴로 돌아가길 원하면 #을 입력하세요. ");
 			System.out.print(">>>");
-			while (true) {
-				choice = scan.nextLine();
-				if (choice.isEmpty()) {
-					System.out.println("휴대폰번호가 입력되지 않았습니다. 다시입력하세요.");
-					System.out.print(">>>");
-				} else {
-					mvo.setPhoneNum(choice);
-					mdao.updatePhoneNum(choice, inputId);
-					break;
+			choice = scan.nextLine();
+			if (!choice.equalsIgnoreCase("#")) {
+				while (true) {
+					if (choice.isEmpty()) {
+						System.out.println("휴대폰번호가 입력되지 않았습니다. 다시입력하세요.");
+						System.out.print(">>>");
+						choice = scan.nextLine();
+					} else {
+						mvo.setPhoneNum(choice);
+						mdao.updatePhoneNum(choice, inputId);
+						break;
+					}
 				}
+				System.out.println("휴대폰번호 변경이 완료되었습니다.");
 			}
-			System.out.println("휴대폰번호 변경이 완료되었습니다.");
 			break;
 		case "3":// 이메일 검증, 이메일형식 기능구현못함
-			System.out.println("변경할 이메일을 입력하세요. ");
+			System.out.println("변경할 이메일을 입력하세요. 작성을 취소하고 메인메뉴로 돌아가길 원하면 #을 입력하세요. ");
 			System.out.println(">>>");
 			choice = scan.nextLine();
-			mvo.setEmail(choice);
-			mdao.updateEmail(choice, inputId);
-			System.out.println("이메일 변경이 완료되었습니다.");
+			if (!choice.equalsIgnoreCase("#")) {
+				mvo.setEmail(choice);
+				mdao.updateEmail(choice, inputId);
+				System.out.println("이메일 변경이 완료되었습니다.");
+			}
 			break;
 		case "4":// 주소형식 기능구현못함
-			System.out.println("변경할 주소를 입력하세요. ");
+			System.out.println("변경할 주소를 입력하세요. 작성을 취소하고 메인메뉴로 돌아가길 원하면 #을 입력하세요. ");
 			System.out.println(">>>");
 			choice = scan.nextLine();
-			mvo.setAddress(choice);
-			mdao.updateAddress(choice, inputId);
-			System.out.println("주소 변경이 완료되었습니다.");
+			if (!choice.equalsIgnoreCase("#")) {
+				mvo.setAddress(choice);
+				mdao.updateAddress(choice, inputId);
+				System.out.println("주소 변경이 완료되었습니다.");
+			}
+			break;
+		case "5":
+			Main_Operation.operation();
 			break;
 		default:
+			System.out.println("번호를 잘못 입력하였습니다. 메뉴로 돌아갑니다.");
 			InfoSearch.search();
-			break;
 		}
+
 	}
 
 	// 로그인기능 구현

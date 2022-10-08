@@ -204,12 +204,14 @@ public class MemberDAO {
 			
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE MEMBER ");
-			sql.append(" SET PHONE_NUM=? ");
+			sql.append(" SET PHONE_NUM= ? || '-' || ? || '-' || ? ");
 			sql.append("WHERE MEMBERID=?");
 			
 			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setString(1, phoneNum);
-			pstmt.setString(2, id);
+			pstmt.setString(1, phoneNum.substring(0, 3));
+			pstmt.setString(2, phoneNum.substring(3, 7));
+			pstmt.setString(3, phoneNum.substring(7));
+			pstmt.setString(4, id);
 
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
