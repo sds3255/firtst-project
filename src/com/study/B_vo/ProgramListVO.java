@@ -34,6 +34,12 @@ public class ProgramListVO {
 		this.teacher = teacher;
 	}
 
+	public ProgramListVO(String programName,int programNum) {
+		this.programNum = programNum;
+		this.programName = programName;
+	}
+
+
 	public int getProgramNum() {
 		return programNum;
 	}

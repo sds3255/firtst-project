@@ -54,7 +54,7 @@ public class ProgramListDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			CommonDriver.close(conn, pstmt,rs);
+			CommonDriver.close(conn, pstmt, rs);
 		}
 		return list;
 	}
@@ -92,7 +92,7 @@ public class ProgramListDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			CommonDriver.close(conn, pstmt,rs);
+			CommonDriver.close(conn, pstmt, rs);
 		}
 		return result;
 	}
@@ -115,9 +115,9 @@ public class ProgramListDAO {
 				result = true;
 			}
 		} catch (Exception e) {
-			
+
 		} finally {
-			CommonDriver.close(conn, pstmt,rs);
+			CommonDriver.close(conn, pstmt, rs);
 		}
 		return result;
 	}
@@ -239,6 +239,30 @@ public class ProgramListDAO {
 		} finally {
 			CommonDriver.close(conn, pstmt);
 		}
+	}
+
+	// 프로그램수정시 개설한 [종목번호:종목명] 나열하기 기능
+	public List<ProgramListVO> selectProg() {
+		List<ProgramListVO> list = new ArrayList<>();
+		ProgramListVO vo = null; 
+		try {
+			conn = CommonDriver.getConnection();
+			String sql = "SELECT DISTINCT PROGRAMNAME,PROGRAMNUM FROM PROGRAM_LIST";
+
+			pstmt = conn.prepareStatement(sql);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				vo=new ProgramListVO(rs.getString("PROGRAMNAME"),rs.getInt("PROGRAMNUM"));
+				list.add(vo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			CommonDriver.close(conn, pstmt, rs);
+		}
+		return list;
 	}
 
 	// 프로그램 삭제기능
