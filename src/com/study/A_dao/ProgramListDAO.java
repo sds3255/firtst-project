@@ -244,7 +244,7 @@ public class ProgramListDAO {
 	// 프로그램수정시 개설한 [종목번호:종목명] 나열하기 기능
 	public List<ProgramListVO> selectProg() {
 		List<ProgramListVO> list = new ArrayList<>();
-		ProgramListVO vo = null; 
+		ProgramListVO vo = null;
 		try {
 			conn = CommonDriver.getConnection();
 			String sql = "SELECT DISTINCT PROGRAMNAME,PROGRAMNUM FROM PROGRAM_LIST";
@@ -254,7 +254,7 @@ public class ProgramListDAO {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				vo=new ProgramListVO(rs.getString("PROGRAMNAME"),rs.getInt("PROGRAMNUM"));
+				vo = new ProgramListVO(rs.getString("PROGRAMNAME"), rs.getInt("PROGRAMNUM"));
 				list.add(vo);
 			}
 		} catch (Exception e) {
@@ -284,6 +284,69 @@ public class ProgramListDAO {
 			CommonDriver.close(conn, pstmt);
 		}
 
+		return result;
+	}
+
+	// 프로그램 추가 : 동일종목명 동일종목번호 검증기능(1)
+	public int collectPro(int programnum) {
+		int result = 0;
+		try {
+			conn = CommonDriver.getConnection();
+			String sql = "SELECT COUNT(*)AS CNT FROM PROGRAM_LIST WHERE PROGRAMNUM =?";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, programnum);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt("CNT");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			CommonDriver.close(conn, pstmt, rs);
+		}
+		return result;
+	}
+
+	// 프로그램 추가 : 동일종목명 동일종목번호 검증기능(2)
+	public String collectPro2(int programnum) {
+		String result = null;
+		try {
+			conn = CommonDriver.getConnection();
+			String sql = "SELECT DISTINCT PROGRAMNAME FROM PROGRAM_LIST WHERE PROGRAMNUM=?";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, programnum);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getString("PROGRAMNAME");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			CommonDriver.close(conn, pstmt, rs);
+		}
+		return result;
+	}
+	
+	// 프로그램 추가 : 동일종목명 동일종목번호 검증기능(3)
+	public int collectPro3(String choice) {
+		int result = 0;
+		try {
+			conn = CommonDriver.getConnection();
+			String sql = "SELECT COUNT(*)AS CNT FROM PROGRAM_LIST WHERE PROGRAMNAME=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, choice);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt("CNT");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			CommonDriver.close(conn, pstmt, rs);
+		}
 		return result;
 	}
 

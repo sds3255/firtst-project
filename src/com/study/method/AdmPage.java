@@ -173,32 +173,53 @@ public class AdmPage {// 관리자페이지 항목 "5" 선택시
 		}
 		System.out.println();
 		System.out.print(">>>");
-		choice = scan.nextLine();
-		if (!choice.equalsIgnoreCase("#")) {
+		programId = scan.nextLine();
+		if (!programId.equalsIgnoreCase("#")) {
 			while (true) {
-				if (choice.isEmpty()) {
+				if (programId.isEmpty()) {
 					System.out.println("종목번호가 입력되지 않았습니다. 다시입력하세요.");
 					System.out.print(">>>");
-					choice = scan.nextLine();
+					programId = scan.nextLine();
 				} else {
-					pvo.setProgramNum(Integer.parseInt(choice));
+					pvo.setProgramNum(Integer.parseInt(programId));
 					break;
 				}
 			}
 
 			// (프로그램 추가기능)종목명지정=>필수입력사항으로 미입력시 재입력기능구현
+			int result = pdao.collectPro(Integer.parseInt(programId));
+			String results = pdao.collectPro2(Integer.parseInt(programId));
 			System.out.println("새로운 종목명을 지정하세요.(단 동일종목일 경우 동일명사용) 메뉴로 돌아가기는 #을 입력하세요.");
 			System.out.print(">>>");
 			choice = scan.nextLine();
 			if (!choice.equalsIgnoreCase("#")) {
+				
 				while (true) {
 					if (choice.isEmpty()) {
 						System.out.println("종목명이 입력되지 않았습니다. 다시입력하세요.");
 						System.out.print(">>>");
-						choice = scan.nextLine();
+						choice = scan.nextLine();					
 					} else {
-						pvo.setProgramName(choice);
-						break;
+						if(result>0) {//종목번호 이미 존재
+							if(results.equals(choice)) {//choice가 DB의 종목명과 같으면 set
+								pvo.setProgramName(choice);
+								break;
+							}else {//같지않으면 알림생성
+								System.out.println("해당종목번호에는 이미 지정된 종목명이 있습니다. 다시 입력하세요.");
+								System.out.print(">>>");
+								choice = scan.nextLine();
+							}
+						} else {//종목번호 없음 새로 생성해야함						
+							int resultss = pdao.collectPro3(choice);
+							if(resultss>0) {//choice가 db의 종목명과 같으면 알림생성
+								System.out.println("해당종목에는 이미 지정된 종목번호가 있습니다. 다시 입력하세요.");
+								System.out.print(">>>");
+								choice = scan.nextLine();								
+							}else {
+								pvo.setProgramName(choice);
+								break;
+							}				
+						}
 					}
 				}
 				// (프로그램 추가기능)과정번호지정=>primary key로 중복불가 처리 및 필수입력사항으로 미입력시 재입력기능구현
